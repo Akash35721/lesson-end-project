@@ -1,14 +1,25 @@
-name: GitHub Actions Demo
-# run-name is only supported for manual_dispatch workflows, so you can remove it for a push-triggered run
-# run-name: Testing out GitHub Actions
+name: Java Calculator CI
 
 on:
   push:
+    branches: [main]
 
 jobs:
-  Basic-Workflow:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print a message
-        run: echo "Job is executing as part of Basic workflow"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compile Java sources
+        run: javac Calculator.java CalculatorTest.java
+
+      - name: Run tests
+        run: java CalculatorTest
